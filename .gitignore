@@ -1,0 +1,31 @@
+.DS_Store
+
+
+# Canonical location for work-in-progress stuff
+src/wip/
+
+# Developer configuration
+/Makefile
+/.vscode
+/.envrc
+/.direnv
+.ghci
+hie.yaml
+/*.sh
+
+# Build output
+/html
+/_build
+/result*
+/node_modules
+/dist-newstyle
+/stack.yaml.lock
+/.stack-work
+.shake
+*.agdai
+*.hi
+*.o
+*.hi-boot
+*.o-boot
+/rubtmp*
+

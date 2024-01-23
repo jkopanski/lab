@@ -1,0 +1,91 @@
+cabal-version:      2.4
+name:               1lab-shake
+version:            0.1.0.0
+author:             Amélia Liao
+maintainer:         me@amelia.how
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+common common
+  build-depends:
+    base >=4.14.3.0,
+    aeson,
+    Agda,
+    blaze-html,
+    bytestring,
+    containers,
+    deepseq,
+    directory,
+    filepath,
+    mtl,
+    SHA,
+    split,
+    text,
+    transformers,
+    unicode-collation,
+    unordered-containers,
+    uri-encode,
+    hashable,
+    binary,
+    parsec,
+    syb,
+  other-modules:
+    Agda,
+    HTML.Backend,
+    HTML.Base,
+    HTML.Emit,
+    Shake.AgdaCompile,
+    Shake.Git,
+    Shake.KaTeX,
+    Shake.LinkGraph,
+    Shake.LinkReferences,
+    Shake.Markdown,
+    Shake.Modules,
+    Shake.Options,
+    Shake.SearchData,
+    Shake.Highlights,
+    Shake.Utils,
+    Agda,
+    Macros,
+    Timer,
+    Definitions
+  default-language: Haskell2010
+  ghc-options: -Wextra -Wall -Wno-name-shadowing -Wno-implicit-prelude
+  default-extensions: BlockArguments, LambdaCase
+
+executable shake
+  import:           common
+  -- putting hs-source-dirs in common confuses hie-bios
+  hs-source-dirs:   app
+  main-is:          Main.hs
+  build-depends:
+    citeproc,
+    doctemplates,
+    extra,
+    fsnotify >= 0.4 && < 0.5,
+    network-uri,
+    pandoc,
+    pandoc-types,
+    process,
+    shake,
+    stm,
+    tagsoup,
+  other-modules:
+      HTML.Emit
+    , Shake.AgdaCompile
+    , Shake.Diagram
+    , Shake.Digest
+    , Shake.Git
+    , Shake.KaTeX
+    , Shake.LinkGraph
+    , Shake.LinkReferences
+    , Shake.Markdown
+    , Shake.Modules
+    , Shake.Options
+    , Shake.SearchData
+    , Shake.Utils
+    , Timer
+  ghc-options: -j -threaded -with-rtsopts -A128M -rtsopts

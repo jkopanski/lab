@@ -1,0 +1,128 @@
+#search-wrapper > .modal-contents {
+  align-items: stretch;
+  text-align: left;
+
+  font-family: var(--sans-serif);
+  --font-size: 18px;
+}
+
+#search-results {
+  flex-grow: 1;
+  overflow-y: auto;
+
+  & > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      margin: 0;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+input#search-box {
+  width:     100%;
+  font-size: 100%;
+  border:    none;
+
+  caret-color:      var(--search-selected);
+  background-color: var(--text-bg);
+
+  padding: 1em 1.5em 1em 1.5em;
+
+  box-sizing: border-box;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+a.search-result {
+  padding: 0.1em 0.75em 0.1em 0.75em;
+  margin: 0.3em 0;
+  display: block;
+  text-decoration: none;
+
+  border-left: 3px solid var(--text-bg);
+
+  &, &:focus, &:visited, &:active {
+    font-weight: inherit;
+    color: inherit;
+  }
+
+  &:focus, li.active > & {
+    border-left: 3px solid var(--search-selected);
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 0.85em;
+    font-weight: bold;
+
+    span.search-module {
+      font-weight: normal;
+    }
+
+    &.search-identifier {
+      @include monospaced;
+      // our mono font is bulkier than our sans font so it needs a
+      // smaller size to look comparable
+      font-size: 0.75em;
+      margin-bottom: 5px;
+    }
+  }
+
+  > p {
+    margin: 0;
+  }
+
+  > .search-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .search-module {
+      margin-left: 0.5em;
+      font-size: 0.7em;
+      color: var(--text-fg-alt);
+      font-style: italic;
+    }
+
+    span.search-match-key {
+      padding-left: 1em;
+      font-size: 0.8em;
+      @include monospaced;
+    }
+  }
+
+  & .search-type { font-size: 0.55em; }
+  & .search-desc { font-size: 0.75em; }
+
+  & .search-match {
+    text-decoration: 2px var(--primary) underline;
+  }
+}
+
+li.search-header {
+  font-size: 0.8em;
+  padding: 0.3em 0.75em 0.3em 0.75em;
+}
+
+.search-error {
+  padding: 0.5em;
+
+  color: $red-900;
+  background: $red-300;
+}

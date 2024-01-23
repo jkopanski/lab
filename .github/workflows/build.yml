@@ -1,0 +1,87 @@
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+
+name: Build
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      mailmap: ${{ secrets.MAILMAP }}
+
+    steps:
+      - name: Checkout ⬇️
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # we need the commit history for authors
+
+      - name: Install Nix ❄️
+        uses: cachix/install-nix-action@v20
+
+      - name: Set up Cachix ♻️
+        uses: cachix/cachix-action@v12
+        with:
+          name: 1lab
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Check that imports are sorted
+        if: github.event_name == 'pull_request'
+        run: |
+          nix run -f . sort-imports
+          if ! git diff --quiet; then
+            echo 'Imports are not sorted. Please run `support/sort-imports.hs`.'
+            exit 1
+          fi
+
+      - name: Build the Shakefile 🧰
+        run: |
+          hash=$(nix-build -A shakefile --no-out-link)
+          hash=${hash#/nix/store/} hash=${hash%%-*}
+          echo "shake_version=$hash" >> "$GITHUB_ENV"
+
+      - name: Cache _build ♻️
+        uses: actions/cache@v3
+        with:
+          path: _build
+          key: shake-4-${{ env.shake_version }}-${{ github.run_id }}
+          restore-keys: shake-4-${{ env.shake_version }}-
+
+      - name: Build 🛠️
+        run: |
+          echo "$mailmap" > .mailmap
+          nix-shell --arg interactive false --run "$build_command"
+        env:
+          NIX_BUILD_SHELL: bash
+          build_command: |
+            set -eu
+            1lab-shake -j all
+            eval "$installPhase"
+
+      - name: Upload site ⬆️
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: _build/site
+          retention-days: 1
+
+  deploy:
+    needs: build
+    if: ${{ github.ref_name == 'main' }}
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy 🚀
+        id: deployment
+        uses: actions/deploy-pages@v1
