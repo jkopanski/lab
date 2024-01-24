@@ -46,7 +46,7 @@ defaultOptions = Options
   { _optSkipTypes = False
   , _optSkipAgda  = False
   , _optWatching  = Nothing
-  , _optBaseUrl   = ""
+  , _optBaseUrl   = "lab"
   , _optGitOnly   = False
   }
 
