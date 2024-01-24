@@ -56,7 +56,7 @@ let
     our-ghc
     sort-imports
   ] else [
-    agda.withPackages (p: [ p.standard-library ])
+    (agda.withPackages (p: [ p.standard-library ]))
     labHaskellPackages.pandoc.data
   ]);
 
