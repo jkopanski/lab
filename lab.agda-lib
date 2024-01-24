@@ -1,4 +1,5 @@
 name: lab
+depend: standard-library
 include:
   src
   wip

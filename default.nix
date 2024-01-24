@@ -56,9 +56,10 @@ let
     our-ghc
     sort-imports
   ] else [
-    labHaskellPackages.Agda.data
+    agda.withPackages (p: [ p.standard-library ])
     labHaskellPackages.pandoc.data
   ]);
+
 in
   pkgs.stdenv.mkDerivation rec {
     name = "1lab";
@@ -78,6 +79,13 @@ in
 
     LANG = "C.UTF-8";
     buildPhase = ''
+      mkdir _build
+      cp -R ${pkgs.agdaPackages.standard-library} standard-library
+      cp -R ${pkgs.agdaPackages.standard-library} _build/standard-library
+      chmod -R 777 _build
+      chmod -R 777 standard-library
+      echo './standard-library/standard-library.agda-lib' > libraries
+      export AGDA_DIR=.
       1lab-shake all -j
     '';
 
