@@ -50,18 +50,12 @@ jobs:
 
       - name: Build 🛠️
         run: |
-          nix-shell --arg interactive false --run "$build_command"
-        env:
-          NIX_BUILD_SHELL: bash
-          build_command: |
-            set -eu
-            1lab-shake -j all
-            eval "$installPhase"
+          nix-build
 
       - name: Upload site ⬆️
         uses: actions/upload-pages-artifact@v1
         with:
-          path: _build/site
+          path: result
           retention-days: 1
 
   deploy:
