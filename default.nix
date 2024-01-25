@@ -44,17 +44,7 @@ let
   } script;
 
   deps = with pkgs; [
-    (agda.withPackages (p: [
-      (p.standard-library.overrideAttrs (oldAttrs: {
-        version = "2.0";
-        src =  fetchFromGitHub {
-          repo = "agda-stdlib";
-          owner = "agda";
-          rev = "v2.0";
-          hash = "sha256-TjGvY3eqpF+DDwatT7A78flyPcTkcLHQ1xcg+MKgCoE=";
-        };
-      }))
-    ]))
+    (agda.withPackages (p: [ (p.standard-library) ]))
 
     # For driving the compilation:
     shakefile
