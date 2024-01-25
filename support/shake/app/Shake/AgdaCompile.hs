@@ -152,7 +152,7 @@ compileAgda stateVar = do
 
       resetState
 
-      setCommandLineOptions' baseDir defaultOptions
+      setCommandLineOptions' baseDir (defaultOptions { optLocalInterfaces = True })
 
       for_ target \source -> do
         absPath <- liftIO $ absolute source

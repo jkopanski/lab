@@ -82,21 +82,23 @@ in
       export out=_build/site
     '';
 
+    configurePhase = ''
+      echo "${pkgs.agdaPackages.standard-library.outPath}/${pkgs.agdaPackages.standard-library.libraryFile}" > libraries
+      export AGDA_DIR=.
+    '';
+
     LANG = "C.UTF-8";
     buildPhase = ''
-      mkdir _build
-      cp -R ${pkgs.agdaPackages.standard-library} standard-library
-      cp -R ${pkgs.agdaPackages.standard-library} _build/standard-library
-      chmod -R 777 _build
-      chmod -R 777 standard-library
-      echo './standard-library/standard-library.agda-lib' > libraries
-      export AGDA_DIR=.
       1lab-shake all -j
     '';
 
     installPhase = ''
       # Copy our build artifacts
       mkdir -p $out
+      # dirty hack to get standard library sources available
+      # they are not pretty but at least available
+      # TODO: write proper shake rules to make them nicer?
+      cp -Lrvf _build/html0/* $out
       cp -Lrvf _build/html/* $out
 
       # Copy KaTeX CSS and fonts
