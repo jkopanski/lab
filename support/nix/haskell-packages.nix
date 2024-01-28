@@ -14,9 +14,9 @@ in
   {
     # Can't just override all Haskell packages because callCabal2nix
     # somehow depends on mime-types
-    labHaskellPackages = super.haskell.packages.ghc946.override (old: {
+    labHaskellPackages = super.haskell.packages.ghc948.override (old: {
       overrides = self: super: {
-        Agda = noJunk (super.callCabal2nixWithOptions "Agda" (thunkSource ./dep/Agda) "-f optimise-heavily -f debug" {});
+        # Agda = noJunk (super.callCabal2nixWithOptions "Agda" (thunkSource ./dep/Agda) "-f optimise-heavily -f debug" {});
       };
     });
   }

@@ -44,6 +44,8 @@ let
   } script;
 
   deps = with pkgs; [
+    (agda.withPackages (p: [ (p.standard-library) ]))
+
     # For driving the compilation:
     shakefile
 
@@ -52,11 +54,14 @@ let
 
     # For building diagrams:
     poppler_utils our-texlive
+
   ] ++ (if interactive then [
     our-ghc
     sort-imports
+
+    # local preview serving
+    python3
   ] else [
-    (agda.withPackages (p: [ p.standard-library ]))
     labHaskellPackages.pandoc.data
   ]);
 
